@@ -168,7 +168,9 @@ Open the `supplypulse` agent in Agentverse, choose **Chat with Agent**, and desc
 
 ## 💬 Commands
 
-Commands are plain messages typed in the chat. `N` is a supplier number shown in the risk check.
+Commands are plain messages typed in the chat. `N` is a supplier number shown in the risk check. The risk check is
+an **interactive card**: its buttons (*Why?*, *Find alternatives*, *Draft email*, *Scan again*, *Plans*) send the same
+commands, so everything below also works by typing.
 
 **Set up your supply chain**
 
@@ -188,7 +190,8 @@ replace the supplier) and `company` (a listed company name, which adds a financi
 | Command | Example | What it does |
 |---|---|---|
 | `scan` | `scan` | Runs a fresh risk check |
-| `results` | `results` | Shows the latest risk check or draft again |
+| `results` | `results` | Shows the latest risk check again (as a card) |
+| `plain` | `plain` | Shows the latest result as plain text, for clients that cannot draw cards |
 | `why N` | `why 2` | Shows the evidence and score breakdown for supplier N |
 
 **Act on a risk**
@@ -313,6 +316,7 @@ councils could offer SupplyPulse to all members, and freight forwarders could wh
 | `ALPHAVANTAGE_API_KEY` | Optional financial check |
 | `AGENT_SEED_PREFIX` | Fixes the agents' addresses. Use a long random value and never change it |
 | `USE_MAILBOX` | `1` for ASI:One (default), `0` for local-only testing |
+| `USE_CARDS` | `1` sends the risk check as an interactive card (default), `0` sends plain text only |
 | `MONITOR_INTERVAL_S` | Monitoring interval in seconds (86400 = daily) |
 | `ALLOW_UNVERIFIED_PAYMENTS` | `1` skips only the on-chain check, for testing. Keep `0` |
 

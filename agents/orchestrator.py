@@ -4,7 +4,7 @@ from datetime import datetime
 
 from uagents import Agent, Context, Protocol
 from uagents_core.contrib.protocols.chat import (
-    ChatAcknowledgement, ChatMessage, EndSessionContent, TextContent, chat_protocol_spec)
+    ChatAcknowledgement, ChatMessage, EndSessionContent, MetadataContent, TextContent, chat_protocol_spec)
 
 import store
 from agents import billing
@@ -12,6 +12,7 @@ from agents.common import PORTS, address, seed, use_mailbox
 from agents.dialog import Dialog, Session
 from models.messages import (HazardRequest, MitigationRequest, MitigationResult, MonitorTick, ScanReport,
                              ScanStart, SignalRequest)
+from render import cards
 
 _kwargs = {"mailbox": True, "publish_agent_details": True} if use_mailbox() else {
     "endpoint": [f"http://127.0.0.1:{PORTS['orchestrator']}/submit"]}
@@ -64,6 +65,19 @@ async def say(ctx: Context, user: str, text: str, end: bool = False):
     await ctx.send(user, ChatMessage(timestamp=datetime.utcnow(), msg_id=uuid.uuid4(), content=content))
 
 
+async def say_dashboard(ctx: Context, user: str, report: ScanReport, fallback_text: str) -> None:
+    """Send the risk check as an ASI:One card. If the card cannot be built, send the text version instead, so a
+    result is never lost. The message text is a short summary that also stands alone if a client can't draw cards."""
+    try:
+        md = cards.metadata("custom", cards.dashboard_payload(report))
+        content = [TextContent(type="text", text=cards.narration(report)), MetadataContent(type="metadata", metadata=md)]
+    except Exception:  # noqa: BLE001
+        ctx.logger.exception("could not build the dashboard card; sending text")
+        await say(ctx, user, fallback_text)
+        return
+    await ctx.send(user, ChatMessage(timestamp=datetime.utcnow(), msg_id=uuid.uuid4(), content=content))
+
+
 @agent.on_event("startup")
 async def on_startup(ctx: Context):
     global _ctx
@@ -82,7 +96,13 @@ async def on_chat(ctx: Context, sender: str, msg: ChatMessage):
     text = "".join(c.text for c in msg.content if isinstance(c, TextContent))
     if not text.strip():
         return
-    await say(ctx, sender, await dialog.handle(sender, text))
+    command = cards.parse_selection(text) or text  # a card button arrives as selection JSON; plain chat is unchanged
+    if cards.enabled() and cards.dashboard_requested(command):
+        sess = dialog.sessions.get(sender)
+        if sess and sess.last_report and not sess.last_report.monitor:
+            await say_dashboard(ctx, sender, sess.last_report, sess.last_output)
+            return
+    await say(ctx, sender, await dialog.handle(sender, command))
 
 
 @chat.on_message(ChatAcknowledgement)
@@ -97,7 +117,9 @@ async def on_report(ctx: Context, sender: str, msg: ScanReport):
     text, _is_alert = dialog.on_report(msg)
     # Agent-initiated messages may not be delivered by ASI:One without a new user message (open
     # question in the plan); alerts are also kept in the session and shown by the `alerts` command.
-    if text:
+    if text and cards.enabled() and not msg.monitor:
+        await say_dashboard(ctx, msg.user, msg, text)
+    elif text:
         await say(ctx, msg.user, text)
 
 

@@ -21,7 +21,8 @@ HELP = ("**SupplyPulse** watches your suppliers and ports for disruption risk.\n
         "Describe your supply chain in plain language, e.g. _\"I make cotton garments in Tiruppur. "
         "Fabric comes from a mill in Erode, zippers from Shenzhen. I ship through Chennai port.\"_\n\n"
         "Commands: `confirm`, `scan`, `why N`, `alternatives N`, `email N`, `inquire N`, `plans`, `upgrade`, "
-        "`alerts`, `replay <scenario>` / `replay off`, `delete my data`, `help`.")
+        "`alerts`, `results`, `plain` (text version of the last result), `replay <scenario>` / `replay off`, "
+        "`delete my data`, `help`.")
 
 DOMESTIC_LEAD_DAYS, ABROAD_LEAD_DAYS = 7, 25
 
@@ -230,7 +231,7 @@ class Dialog:
             return "Alerts cleared."
 
         # ---- results on demand (fallback if the platform does not deliver agent-initiated messages)
-        if low in ("results", "result", "status", "dashboard", "show results"):
+        if low in ("results", "result", "status", "dashboard", "show results", "plain", "text", "plain text"):
             return sess.last_output or "Nothing to show yet. Run `scan` first, or wait a few more seconds."
 
         # ---- scans
