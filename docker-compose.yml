@@ -1,0 +1,9 @@
+services:
+  supplypulse:
+    build: .
+    env_file: .env
+    volumes:
+      - supplypulse-data:/data
+    restart: unless-stopped
+volumes:
+  supplypulse-data:

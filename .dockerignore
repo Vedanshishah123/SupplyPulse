@@ -1,0 +1,10 @@
+# Never bake secrets, local state or tooling into the image
+.env
+.venv/
+.git/
+data/
+__pycache__/
+*.pyc
+.pytest_cache/
+docs/
+tests/

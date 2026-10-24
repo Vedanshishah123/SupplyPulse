@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 460" width="1000" height="460" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title>SupplyPulse architecture</title>
+  <desc>An ASI:One user talks to the orchestrator over the Chat and Payment protocols. The orchestrator sends each scan to the hazard, events and financial agents, which pass signals to the scorer; the scorer returns a risk report. The mitigation agent finds alternatives and drafts emails, and the monitor agent triggers scheduled re-scans.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="460" fill="#ffffff"/>
+
+  <!-- user -->
+  <rect x="20" y="185" width="150" height="70" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+  <text x="95" y="215" text-anchor="middle" font-size="16" font-weight="600" fill="#1e1b4b">ASI:One user</text>
+  <text x="95" y="236" text-anchor="middle" font-size="12" fill="#475569">chat in plain language</text>
+
+  <!-- orchestrator -->
+  <rect x="240" y="150" width="200" height="140" rx="10" fill="#e0f2fe" stroke="#0369a1" stroke-width="2.5"/>
+  <text x="340" y="190" text-anchor="middle" font-size="17" font-weight="700" fill="#0c4a6e">Orchestrator</text>
+  <text x="340" y="214" text-anchor="middle" font-size="12" fill="#334155">Chat + Payment protocols</text>
+  <text x="340" y="232" text-anchor="middle" font-size="12" fill="#334155">sessions, plans, cards</text>
+  <text x="340" y="262" text-anchor="middle" font-size="12" font-weight="600" fill="#0369a1">only agent on Agentverse</text>
+
+  <!-- workers -->
+  <rect x="520" y="30" width="250" height="58" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+  <text x="645" y="55" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Hazard agent</text>
+  <text x="645" y="74" text-anchor="middle" font-size="12" fill="#475569">Open-Meteo · GDACS · USGS</text>
+
+  <rect x="520" y="110" width="250" height="58" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+  <text x="645" y="135" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Events agent</text>
+  <text x="645" y="154" text-anchor="middle" font-size="12" fill="#475569">GDELT news</text>
+
+  <rect x="520" y="190" width="250" height="58" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+  <text x="645" y="215" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Financial agent</text>
+  <text x="645" y="234" text-anchor="middle" font-size="12" fill="#475569">Alpha Vantage</text>
+
+  <rect x="520" y="320" width="250" height="58" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
+  <text x="645" y="345" text-anchor="middle" font-size="15" font-weight="600" fill="#0f172a">Mitigation agent</text>
+  <text x="645" y="364" text-anchor="middle" font-size="12" fill="#475569">Geoapify · ASI:One API (emails)</text>
+
+  <!-- scorer -->
+  <rect x="830" y="85" width="140" height="115" rx="10" fill="#ecfdf5" stroke="#047857" stroke-width="2"/>
+  <text x="900" y="125" text-anchor="middle" font-size="16" font-weight="700" fill="#064e3b">Scorer agent</text>
+  <text x="900" y="147" text-anchor="middle" font-size="12" fill="#334155">likelihood × impact</text>
+  <text x="900" y="165" text-anchor="middle" font-size="12" fill="#334155">no LLM in scores</text>
+
+  <!-- monitor -->
+  <rect x="240" y="370" width="200" height="56" rx="8" fill="#fff7ed" stroke="#c2410c" stroke-width="1.5"/>
+  <text x="340" y="394" text-anchor="middle" font-size="15" font-weight="600" fill="#7c2d12">Monitor agent</text>
+  <text x="340" y="412" text-anchor="middle" font-size="12" fill="#475569">scheduled re-scans, alerts on change</text>
+
+  <!-- arrows -->
+  <g stroke="#475569" stroke-width="1.8" fill="none" marker-end="url(#a)">
+    <path d="M170,220 L238,220" marker-start="url(#a)"/>
+    <path d="M440,185 L518,59"/>
+    <path d="M440,205 L518,139"/>
+    <path d="M440,225 L518,219"/>
+    <path d="M440,265 L518,349" marker-start="url(#a)"/>
+    <path d="M770,59 L828,110"/>
+    <path d="M770,139 L828,139"/>
+    <path d="M770,219 L828,180"/>
+    <path d="M900,200 L900,300 L390,300 L390,292"/>
+    <path d="M290,368 L290,292"/>
+  </g>
+  <text x="610" y="292" text-anchor="middle" font-size="12" fill="#047857" font-weight="600">risk report</text>
+
+  <!-- footer -->
+  <text x="500" y="448" text-anchor="middle" font-size="12" fill="#64748b">Seven uAgents in one process. Internal agents exchange typed messages in memory; only the orchestrator is reachable from ASI:One.</text>
+</svg>
