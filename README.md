@@ -343,21 +343,3 @@ docs/         architecture diagram
 </details>
 
 ---
-
-## 🚧 Limitations
-
-- ASI:One's chat protocol has no buttons, so interactive "cards" are formatted text with commands such as `why 2`.
-- Replies the agent sends on its own after the first acknowledgement may not appear in ASI:One; `results` shows the
-  latest output on demand, and `alerts` lists monitoring alerts.
-- Most small suppliers are not listed companies, so the financial signal is often absent. Hazard and event
-  signals carry most of the weight, and the report says so.
-- Map data is sparse for small suppliers and poor inside China. Alternatives are businesses whose *name* matches
-  the component and are always presented as unverified, with sourcing leads to check by hand.
-- Local news depends on GDELT, which rate-limits heavily. When it is unavailable the report says so rather than
-  implying there is no news.
-- Open-Meteo's free tier is non-commercial; a commercial deployment needs its paid plan.
-- Payments use the Fetch.ai **testnet**. The request format follows Fetch.ai's reference seller and the flow has been
-  exercised with a simulated buyer; a payment from a funded ASI:One wallet is still to be verified end to end.
-- Stored supplier data is plain JSON, kept to the minimum and removable with `delete my data`; encryption at rest
-  is future work.
-- The Docker setup has not been built or run on the machine this was developed on.
